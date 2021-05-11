@@ -3,19 +3,22 @@ var crypto = require('crypto');
 
 //Create custom Token
 async function createCustomTokenUser(uid, secret, next) {
-    let userRecord = await admin.auth().getUser(uid);
-    if (userRecord.customClaims.secret === secret && uid) {
-        return await admin.auth().createCustomToken(uid);
+    if (uid) {
+        let userRecord = await admin.auth().getUser(uid);
+        console.log(userRecord.customClaims.secret)
+        if (secret && userRecord.customClaims.secret === secret) {
+            return await admin.auth().createCustomToken(uid);
+        } else {
+            next();
+        }
     } else {
-        next()
+        next();
     }
 }
 
 // Add custom claims to user
-//Definir el atributo adminSchools
 async function addCustomClaimsToUser(uid) {
     claims = {
-        littera: 'Littera',
         secret: crypto.randomBytes(20).toString('base64'),
         adminSchools: [
             'littera'

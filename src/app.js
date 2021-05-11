@@ -40,23 +40,23 @@ app.post('/users/private', authentication, (req, res) => {
 
 // Routes to actions
 app.post('/user/create-custom-tokens', (req, res) => {
-    // validar el error aca
     createCustomTokenUser(req.body.uid, req.body.secret).then(customToken => {
         res.json({
             customToken
         })
     }).catch(err => {
-        res.status(400).send({error: 'Forbidden'})
+        res.status(403).send({error: 'Forbidden'})
     })
 });
 
+// Add user custom claims
 app.post('/user/add-custom-claims', (req, res) => {
     addCustomClaimsToUser(req.body.uid).then(() => {
         res.json({
             message: 'Claims added'
         })
     }).catch(err => {
-        res.status(400).send('Error: ', err)
+        res.status(403).send('Error: ', err)
     })
 });
 
